@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
         else
         {
             Server ircServer = ("127.0.0.1",argv[1],argv[2]);
-            //ircServer başlatma fonk. yazılcak  = ircServer.start();
+            ircServer.start();
         }
         
         
