@@ -1,3 +1,7 @@
+
+#define MAX_CONNECTIONS 42
+#if !defined(SERVER_HPP)
+#define SERVER_HPP
 #include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,26 +13,30 @@
 #include <vector>
 #include <poll.h>
 #include <stdexcept>
-
-
-#define MAX_CONNECTIONS 42
+#include "User.hpp"
+#include "Commands.hpp"
 
 class Server
 {
 private:
-  const std::string   _host;
-  const std::string	_port;
-  const std::string	_password;
+  std::string   _host;
+  std::string	_port;
+  std::string	_password;
   int					_serverSocket;
-    std::vector<struct pollfd> _pollfds;
-    std::vector<User*> _users; // User sınıfını oluşturmayı unutma
+  std::vector<struct pollfd> _pollfds; //giriş çıkış ve fd olaylarını yönetmek için kull. poll fd veri türüdür.
+  std::vector<User *> _users;
     int                 setupSocket();          
 
 public:
-    Server(/* args */);
+    //Server(/* args */);
     Server(const std::string host, const std::string port, const std::string password);
     ~Server();
 
     void start();
+    void addUser();
     void handleEvents();
 };
+
+
+#endif // SERVER_HPP
+
