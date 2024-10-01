@@ -20,7 +20,7 @@ int Server::setupSocket()
     int sock_fd;
     int optval = 1;
 
-    // ip bilgilerini set eder
+    // ip bilgilerini set eder.
     memset(&hints,0,sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
