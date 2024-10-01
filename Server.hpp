@@ -33,7 +33,7 @@ public:
     ~Server();
 
     void start();
-    void addUser();
+    void addUser(int client_fd,char *host, int port);
     void handleEvents();
 };
 

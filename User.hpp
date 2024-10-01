@@ -9,10 +9,13 @@ private:
     std::string _name;
     std::string _surname;
     std::string _nickName;
+    int _client_fd;
+    char *_host;
+    int _port;
 
 public:
 	User();
-    User(const std::string& name, const std::string& nickname, const std::string& surname);
+    User(int client_fd, char *host, int port);
     ~User();
     
     std::string getName() { return _name; }

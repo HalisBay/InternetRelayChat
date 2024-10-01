@@ -98,19 +98,36 @@ void Server::start()
 
 void Server::handleEvents()
 {
+    pollfd client_fd;
     for (unsigned long i = 0; i < _pollfds.size(); ++i) {
         struct pollfd& pfd = _pollfds[i]; // pfd burada tanımlanıyor
-
+        std::cout << pfd.fd << "ali" << std::endl;
         if (pfd.revents & POLLIN) {
             if (pfd.fd == _serverSocket) {
                 std::cout << "\033[35m" << "rainbow mustafa" << "\033[0m" << std::endl;
-                sockaddr_storage clientAddr;
+                sockaddr_in clientAddr;
                 socklen_t addrlen = sizeof(clientAddr);
                 int clientSock = accept(_serverSocket, (sockaddr*)&clientAddr, &addrlen);
                 
                 if (clientSock >= 0) {
-                    // Kullanıcı bilgilerini burada belirleyin, örneğin varsayılan bir kullanıcı ekleyin
-                    addUser();
+                    std::string str;
+                    str = "Enter: <Password>, <Name>, <Nickname>\n";
+                    client_fd.fd = clientSock;    // Yeni kabul edilen client soketini ekliyoruz
+                    client_fd.events = POLLIN;    // Veri bekle
+                    _pollfds.push_back(client_fd);
+                    if(fcntl(clientSock, F_SETFL,O_NONBLOCK)== -1) // fdlerin özelliklerini ayarlar client için
+                        throw std::runtime_error("Error while setting client socket non-blocking!");
+                    send(clientSock, str.c_str(), str.length(), 0);
+                    addUser(clientSock, inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
+                    std::cout << "hbay" << std::endl;
+                }
+                    }
+            }
+            else {
+                char message[1024] = {0};
+                ssize_t bytes_received = recv(client_fd.fd, message, sizeof(message), 0);
+                std::cout << message << std::endl;
+                 // Kullanıcı bilgilerini burada belirleyin, örneğin varsayılan bir kullanıcı ekleyin
                     // std::string userInput;
                     // std::cout << "Type -Help- to see commands";
                     // std::getline(std::cin, userInput);
@@ -118,11 +135,6 @@ void Server::handleEvents()
 		            //     if (userInput == _commands[i]->getName()) {
                     //         std::cout << "mustafa g0dden" << std::endl;
                             //_commands[i]->execute(); her command için execute, sonra yapılabilir
-                        }
-                // addUser();
-                    }
-            }
-            else {
                 // varolan kullanıcı işlemleri
             }
         }
@@ -131,9 +143,9 @@ void Server::handleEvents()
         //     // Kullanıcı çıkış işlemi
         // }
     }
-void Server::addUser()
+void Server::addUser(int client_fd,char *host, int port)
 {
-	User* newUser = new User("a","b","c");
+	User* newUser = new User(client_fd, host, port);
 	_users.push_back(newUser);
-	std::cout << "User added: " << newUser->getNickName() << std::endl;
+	std::cout << "User added: " << "host:" << host <<  "\tport:" << port <<std::endl;
 }

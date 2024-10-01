@@ -4,11 +4,11 @@ User::User()
 {
 }
 
-User::User(const std::string &name, const std::string &nickname, const std::string &surname)
+User::User(int client_fd, char *host, int port)
 {
-	_name = name;
-	_surname = surname;
-	_nickName = nickname;
+	_client_fd = client_fd;
+	_host = host;
+	_port = port;
 }
 
 User::~User()
