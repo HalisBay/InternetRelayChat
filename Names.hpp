@@ -3,7 +3,7 @@
 
 #include "Command.hpp"  // Ensure this includes Commands
 
-class Names : public Command // Inherit from Commands
+class Names : public Command // Inherit from Commands.
 {
 public:
 	Names();
