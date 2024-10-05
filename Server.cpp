@@ -77,6 +77,53 @@ bool isOnlyWhitespace(const std::string& str) {
     return str.find_first_not_of(" \t\n\v\f\r") == std::string::npos;
 }
 
+void Server::forRegisterFromClient(std::string &message, int clientSock, User *us) {
+    size_t pos, lastPos;
+    std::string charactersToFind = "\r\n"; // Satır sonu karakterleri
+
+    
+    if (message.find("PASS") == 0) {
+        lastPos = message.find_first_of(charactersToFind);
+        std::string password = message.substr(6, lastPos - 6);
+        
+        if (_password != password) {
+            sendError(clientSock, "Incorrect password! Please try again.\nEnter: <Password>, <Name>, <Nickname>\n");
+            return;
+        }
+        else
+        {
+                if ((pos = message.find("NICK "))) {
+                    lastPos = message.find(charactersToFind, pos);
+                    std::string nickname = message.substr(pos + 5, lastPos - (pos + 5)); // Düzeltildi
+
+                    if (isUserNameTaken(nickname)) {
+                        sendError(clientSock, "Nickname is already taken! Please try another one.\nEnter: <Password>, <Name>, <Nickname>\n");
+                        return;
+                    }
+                    us->setNickName(nickname);
+                }
+                if ((pos = message.find("USER "))) {
+
+                    lastPos = message.find(' ', pos + 5);
+                    std::string name = message.substr(pos + 5, lastPos - (pos + 5));
+                    us->setName(name);
+                } 
+                if (!us->getName().empty())
+                {
+                    std::string str = ":127.0.0.1 001 " + us->getNickName() + " :Welcome to the Internet Relay Network " +
+                      us->getNickName() + "!" + us->getName() + "@" + "127.0.0.1\r\n";
+                    send(clientSock, str.c_str(), str.length(), 0);
+                    us->setRegister(true);
+                    std::cout << "name: " << us->getName() << " nickname: " << us->getNickName() << " is Register: " << us->didRegister() << std::endl;
+                }
+                else
+                    sendError(clientSock,"Register error.");
+
+        }
+    } 
+
+}
+
 
 
 void Server::forRegister(std::string &message, int clientSock, User *us) {
@@ -103,7 +150,7 @@ void Server::forRegister(std::string &message, int clientSock, User *us) {
     }
 
     if (!part3.empty() && isUserNameTaken(part3)) {
-        sendError(clientSock, "kullanılıyo!!\nEnter: <Password>, <Name>, <Nickname>\n");
+        sendError(clientSock, "This nickname is already in use!\nEnter: <Password>, <Name>, <Nickname>\n");
         return;
     }
 
@@ -206,15 +253,22 @@ void Server::handleEvents()
                     send(clientSock, str.c_str(), str.length(), 0);
                 }
             } else {
+                
                 char message[1024] = {0};
-                memset(message, '\0', sizeof(message)); //TODO: KOMUT ALMAMA SEBEBİ OLABİLİR.
+                memset(message, '\0', sizeof(message));
                 ssize_t bytes_received = recv(pfd.fd, message, sizeof(message), 0);
                 if (bytes_received > 0) {
                     std::string message_str(message);
                     message_str = trim(message_str);
-                    std::cout << message_str << std::endl;
+                    std::cout << message_str << "else içi std"<< std::endl;
                     for(std::vector<User *>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
-                        if ((*it)->getClientfd() == pfd.fd && !(*it)->didRegister() ) {
+
+                        if((*it)->getClientfd() == pfd.fd && message_str.find("\r\n") && !(*it)->didRegister())
+                        {
+                            forRegisterFromClient(message_str,pfd.fd,*it);
+
+                        }
+                        if ((*it)->getClientfd() == pfd.fd && !(*it)->didRegister()) {
                             forRegister(message_str, pfd.fd, *it);
                             break;
                         }
