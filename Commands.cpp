@@ -1,3 +1,4 @@
+#include "Server.hpp"
 #include "Commands.hpp"  // Include Commands header
 #include "Command.hpp"
 #include "Help.hpp"      // Include Help header to recognize Help class
@@ -17,7 +18,7 @@
 #include <sys/socket.h>
 
 // Constructor implementation
-Commands::Commands() {
+Commands::Commands(Server* server) : _server(server) { 
     _commands.push_back(new Help());  // Add Help command in constructor
 	_commands.push_back(new Quit());
 	_commands.push_back(new Join());
@@ -46,6 +47,8 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 	{
 		if(_commands[i]->getName() == cmdName)
 		{
+			_commands[i]->setServer(_server);
+			_commands[i]->setUser(it);
 			// fdyi ya userdan ya da direk clientfd olarak parametre olarak alacak bir fonksiyon gelecek buraya sebebi bütün commandlerin executuna göndermemek için
 			_commands[i]->execute((*it).getClientfd());
 			break;

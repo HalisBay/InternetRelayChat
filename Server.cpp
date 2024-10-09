@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Commands.hpp"
 
 void printSocketInfo(int sock_fd) {
     sockaddr_in addr;
@@ -124,7 +125,11 @@ void Server::forRegisterFromClient(std::string &message, int clientSock, User *u
 
 }
 
-
+void Server::removeUserAndFd(int client_fd)
+{
+    close(client_fd);
+    std::cout << _pollfds.size() << std::endl;
+}
 
 void Server::forRegister(std::string &message, int clientSock, User *us) {
     std::string part1, part2, part3;
@@ -216,7 +221,7 @@ void Server::start()
     _pollfds.push_back(newPollfd);
     std::cout<< "Server Started" << std::endl;
 
-    _commands = new Commands;
+    _commands = new Commands(this);
     
 
     while(true)
@@ -290,6 +295,7 @@ void Server::handleEvents()
             {
                 break;
             }
+            
             std::cout << "arabadan atladi" << std::endl;
         }
     }

@@ -6,6 +6,7 @@ Quit::Quit()
 
 void Quit::execute(int client_fd)
 {
+	_server->removeUserAndFd(client_fd);
 }
 
 std::string Quit::getName() const
