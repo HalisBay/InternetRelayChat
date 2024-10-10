@@ -45,6 +45,8 @@ public:
     bool splitMessage(const std::string &message, std::string &part1, std::string &part2, std::string &part3);
     void forRegisterFromClient(std::string &message, int clientSock, User *us);
     void removeUserAndFd(int client_fd);
+    void sendMessage(int clientSock, const std::string &message);
+    std::string getHost();
 };
 
 std::string trim(const std::string &s);

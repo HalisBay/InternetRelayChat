@@ -54,10 +54,7 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 			break;
 		}
 		if(i == _commands.size() -1&& cmdName != "")
-		{
-			std::string str = "command not found\n";
-			send((*it).getClientfd(), str.c_str(), str.length(), 0);
-		}
+			_server->sendMessage((*it).getClientfd(),"command not found\n");
 	}
 
 	return 0;
