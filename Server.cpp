@@ -127,8 +127,34 @@ void Server::forRegisterFromClient(std::string &message, int clientSock, User *u
 
 void Server::removeUserAndFd(int client_fd)
 {
-    close(client_fd);
-    std::cout << _pollfds.size() << std::endl;
+    // close(client_fd);
+    // std::cout << _pollfds.size() << std::endl;
+    for (std::vector<pollfd>::iterator poll_it = _pollfds.begin(); poll_it != _pollfds.end(); ++poll_it)
+    {
+        std::cout << "asd12" << std::endl;
+        if (poll_it->fd == client_fd)
+        {
+            std::cout << "girdi" << std::endl;
+            close((*poll_it).fd);
+			_pollfds.erase(poll_it);
+			break ;
+
+        }
+    }
+    std::cout << "çıktı poolagirdi" << std::endl;
+    for(std::vector<User *>::iterator it = _users.begin(); it != _users.end(); ++it)
+    {
+        std::cout << client_fd << (*it)->getClientfd() << _users.size() <<std::endl;
+        if (client_fd == (*it)->getClientfd())
+        {
+            delete (*it);
+            _users.erase(it);
+            break ;
+            std::cout << client_fd << (*it)->getClientfd() << _users.size() <<std::endl;
+        }
+    }
+        std::cout << "asd" << std::endl;
+
 }
 
 void Server::forRegister(std::string &message, int clientSock, User *us) {
@@ -266,6 +292,7 @@ void Server::handleEvents()
                     std::string message_str(message);
                     message_str = trim(message_str);
                     std::cout << message_str << "else içi std"<< std::endl;
+                    //const_iterator sorun çıkarabilir. ŞERH düşüyorum.
                     for(std::vector<User *>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
 
                         if((*it)->getClientfd() == pfd.fd && message_str.find("\r\n") && !(*it)->didRegister())
@@ -282,7 +309,9 @@ void Server::handleEvents()
                             if ((*it)->getClientfd() == pfd.fd && (*it)->didRegister())
                                 _commands->commandFinder(message_str, *it);
                         }
-                        
+                        if (_users.empty())
+                            break;
+                        std::cout << _users.size() << std::endl;
                     }
                 }
                 else if (bytes_received < 0)
@@ -291,12 +320,9 @@ void Server::handleEvents()
 
         }
         else if((pfd.revents & POLLHUP) == POLLHUP){
-            if (_users.empty())
-            {
-                break;
-            }
-            
             std::cout << "arabadan atladi" << std::endl;
+            if (_users.empty())
+                break;
         }
     }
 }
