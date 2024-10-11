@@ -16,6 +16,7 @@
 #include "Names.hpp"
 #include "User.hpp"
 #include <sys/socket.h>
+#include <sstream>
 
 // Constructor implementation
 Commands::Commands(Server* server) : _server(server) { 
@@ -43,12 +44,20 @@ Commands::~Commands() {
 
 Command* Commands::commandFinder(const std::string &cmdName, User *it)
 {
+	std::vector<std::string> args = setArgs(cmdName);
 	for(size_t i = 0; i < _commands.size(); i++)
 	{
-		if(_commands[i]->getName() == cmdName)
+		if(_commands[i]->getName() == args[0])
 		{
+
 			_commands[i]->setServer(_server);
 			_commands[i]->setUser(it);
+			_commands[i]->setUserArgs(args);
+			
+			for(std::vector<std::string>::const_iterator it = args.begin(); it != args.end(); ++it) {
+				std::cout << "args içi --------- "<< (*it).data() << std::endl;
+			}
+			
 			// fdyi ya userdan ya da direk clientfd olarak parametre olarak alacak bir fonksiyon gelecek buraya sebebi bütün commandlerin executuna göndermemek için
 			_commands[i]->execute((*it).getClientfd());
 			break;
@@ -64,3 +73,19 @@ std::vector<Command *> Commands::getCommends() const
 {
 	return _commands;
 }
+
+std::vector<std::string> Commands::setArgs(const std::string &msg) {
+    std::vector<std::string> cpyArg;
+    std::stringstream ss(msg);
+    std::string arg;
+
+    // Mesajı boşluklara göre ayır
+    while (std::getline(ss, arg, ' ')) {
+        if (!arg.empty()) { // Boş argümanları ekleme
+            cpyArg.push_back(arg);
+        }
+    }
+
+    return cpyArg;
+}
+

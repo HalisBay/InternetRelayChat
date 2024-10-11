@@ -20,7 +20,7 @@ void Help::execute(int client_fd)
 
 std::string Help::getName() const
 {
-	return "help";
+	return "HELP";
 }
 
 std::string Help::description() const

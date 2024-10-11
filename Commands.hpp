@@ -17,6 +17,7 @@ public:
     virtual ~Commands();  // Destructor declaration
     Command* commandFinder(const std::string& cmdName, User* it);
     std::vector<Command*> getCommends() const;
+    std::vector<std::string> setArgs(const std::string &msg);
 };
 
 #endif // COMMANDS_HPP

@@ -11,3 +11,8 @@ void Command::setUser(User *users)
 {
 	_users = users;
 }
+
+void Command::setUserArgs(std::vector<std::string> args)
+{
+	_args = args;
+}

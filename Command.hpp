@@ -5,11 +5,11 @@
 #include <string>
 #include <iostream>
 #include "Utils.hpp"
-
 class Command {
 protected:
     Server* _server;
     User* _users;
+    std::vector <std::string> _args;
 public:
     virtual ~Command() {}
     Command();
@@ -19,6 +19,7 @@ public:
 
     void setServer(Server* server);
     void setUser(User* users);
+    void setUserArgs(std::vector<std::string> args);
 };
 
 #endif // COMMAND_HPP
