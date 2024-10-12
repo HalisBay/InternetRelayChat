@@ -229,13 +229,13 @@ bool Server::isUserNameTaken(const std::string &nickname) {
 }
 
 void Server::sendError(int clientSock, const std::string &message) {
-    send(clientSock, message.c_str(), message.length(), 0);
+    std::string fullMessage = "ERROR " + message; 
+    send(clientSock, fullMessage.c_str(), fullMessage.length(), 0);
+
 }
 void Server::sendMessage(int clientSock, const std::string &message) {
     send(clientSock, message.c_str(), message.length(), 0);
 }
-
-
 
 std::string trim(const std::string &s) {
     size_t start = s.find_first_not_of(" \n\r\t\f\v");
@@ -289,7 +289,7 @@ void Server::handleEvents()
 
                     if(fcntl(clientSock, F_SETFL,O_NONBLOCK) == -1)
                         throw std::runtime_error("Error while setting client socket non-blocking!");
-                    sendMessage(clientSock,"Enter: <Password>, <Name>, <Nickname>\n");
+                    sendError(clientSock,"Enter: <Password>, <Name>, <Nickname>\n");
                 }
             } else {
                 

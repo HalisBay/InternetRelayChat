@@ -53,17 +53,19 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 			_commands[i]->setServer(_server);
 			_commands[i]->setUser(it);
 			_commands[i]->setUserArgs(args);
-			
+			std::cout << "args içi --------------\n";
+
 			for(std::vector<std::string>::const_iterator it = args.begin(); it != args.end(); ++it) {
-				std::cout << "args içi --------- "<< (*it).data() << std::endl;
+				std::cout <<(*it).data() << std::endl;
 			}
+			std::cout << " args sonu--------------\n";
 			
 			// fdyi ya userdan ya da direk clientfd olarak parametre olarak alacak bir fonksiyon gelecek buraya sebebi bütün commandlerin executuna göndermemek için
 			_commands[i]->execute((*it).getClientfd());
 			break;
 		}
 		if(i == _commands.size() -1&& cmdName != "")
-			_server->sendMessage((*it).getClientfd(),"command not found\n");
+			_server->sendError((*it).getClientfd(),"Command not found\n");
 	}
 
 	return 0;
