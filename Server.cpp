@@ -354,3 +354,11 @@ void Server::addUser(int client_fd,char *host, int port)
 	_users.push_back(newUser);
 	std::cout << "User added: " << "host:" << host <<  "\tport:" << port <<std::endl;
 }
+
+std::vector<User *> Server::getUsers()
+{
+	if (_users.empty()) {
+        std::cerr << "No users in the vector." << std::endl;
+    }
+	return _users;
+}
