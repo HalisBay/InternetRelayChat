@@ -12,10 +12,9 @@ private:
 	string _channelName;
 	string _topicName;
 	//TODO: password alanı için her şeyi kanal mı ypıyor.
-	std::vector<Channel*> _channel; // gerek var mı bilmiyom -H.
 
 public:
-	Channel(/* args */);
+	Channel(std::string &channelName);
 	~Channel();
 	void setChannelName(string channelName);
 	void setTopicName(string topicName);

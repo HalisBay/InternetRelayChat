@@ -17,6 +17,7 @@
 #include <cctype>
 #include <string>
 #include "User.hpp"
+#include "Channel.hpp"
 
 class Commands;  // Forward declaration of Commands
 
@@ -28,6 +29,7 @@ private:
     int _serverSocket;
     std::vector<struct pollfd> _pollfds; // Poll file descriptors for I/O events
     std::vector<User*> _users;
+    std::vector<Channel*> _channel;
     Commands* _commands;  // Pointer to Commands
 
     int setupSocket();          
@@ -47,6 +49,7 @@ public:
     void removeUserAndFd(int client_fd);
     void sendMessage(int clientSock, const std::string &message);
     std::string getHost();
+    Channel *setChannel(std::vector<string> args);
 };
 
 std::string trim(const std::string &s);

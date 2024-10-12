@@ -156,6 +156,18 @@ void Server::removeUserAndFd(int client_fd)
         std::cout << "asd" << std::endl;
 
 }
+//TODO: kanal oluşturur ve kanalın ismini kanallara kaydeder
+Channel *Server::setChannel(std::vector<string> args)
+{
+    Channel *channel = new Channel(args[1]);
+    _channel.push_back(channel);
+//TODO: SADECE GÖRMEK İÇİN
+    for (std::vector<Channel*>::iterator it = _channel.begin(); it != _channel.end(); ++it)
+    {
+        std::cout << (*it)->getChannelName() << std::endl;
+    }
+    return channel;
+}
 
 std::string Server::getHost()
 {
@@ -289,10 +301,9 @@ void Server::handleEvents()
 
                     if(fcntl(clientSock, F_SETFL,O_NONBLOCK) == -1)
                         throw std::runtime_error("Error while setting client socket non-blocking!");
-                    sendError(clientSock,"Enter: <Password>, <Name>, <Nickname>\n");
+                    sendMessage(clientSock,"@ :ServerMessage Enter : <Password>, <Name>, <Nickname>\n");
                 }
             } else {
-                
                 char message[1024] = {0};
                 memset(message, '\0', sizeof(message));
                 ssize_t bytes_received = recv(pfd.fd, message, sizeof(message), 0);

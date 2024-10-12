@@ -1,7 +1,8 @@
 #include "Channel.hpp"
 
-Channel::Channel()
+Channel::Channel(std::string &channelName)
 {
+	_channelName = channelName;
 }
 
 Channel::~Channel()
