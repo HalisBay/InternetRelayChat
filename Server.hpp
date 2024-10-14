@@ -50,7 +50,9 @@ public:
     void sendMessage(int clientSock, const std::string &message);
     std::string getHost();
     Channel *setChannel(std::vector<string> args);
-    void addToChannel(Channel *channel, User *users);
+    Channel* getChannel(std::string chname);
+    void createChannel(Channel* channel);
+    void addToChannel(Channel *channel, User *users,std::string & chname,int clfd);  
 };
 
 std::string trim(const std::string &s);

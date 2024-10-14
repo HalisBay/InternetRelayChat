@@ -168,24 +168,49 @@ Channel *Server::setChannel(std::vector<string> args)
     }
     return channel;
 }
-
-void Server::addToChannel(Channel *channel, User *users)
+void Server::addToChannel(Channel *channel, User *users,std::string & chname,int clfd)
 {
-    channel->setUsers(users);
-    std::vector<User *> usersInChannel = channel->getUsers();
-
+    if (!channel) {
+        std::cerr << "Channel is null!" << std::endl;
+        return; // Hata durumu
+    }
+    std::cout << "------------1\n";
     // Kullanıcıya katıldığını bildiren mesaj
     std::string message = ":" + users->getNickName() + "!" + users->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n";
+    std::cout << "------------1\n";
 
     // Tüm kullanıcılara mesaj gönder
-    for (std::vector<User *>::iterator it = usersInChannel.begin(); it != usersInChannel.end(); ++it)
-    {
-        std::cout << "------------\n";
-        std::cout << usersInChannel.size() << "123----31" <<std::endl;
-        std::cout << (*it)->getNickName() << "mustipatlak" <<std::endl;
-        sendMessage((*it)->getClientfd(), message); // Burada sendMessage fonksiyonunu kullanıcıya göre uyarlayın.
-        std::cout << "------------\n";
+  for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+        if ((*it)->getChannelName() == chname) {
+            sendMessage((*it)->getClientfd(), message);
+            std::cout << "--------\n";
 
+        }
+    }
+    std::cout << "------------1\n";
+
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
+    {
+        if ((*it)->getChannelName() == chname)
+             sendMessage(clfd,":" + (*it)->getNickName() + "!" + (*it)->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n");
+    
+    }
+}
+Channel* Server::getChannel(std::string chname)
+{
+    for(std::vector<Channel *>::iterator it = _channel.begin(); it != _channel.end(); ++it)
+    {
+        if(chname == (*it)->getChannelName())
+            return *it;
+    }
+    return NULL;
+}
+void Server::createChannel(Channel *channel)
+{
+    if (!channel)
+    {
+        _channel.push_back(channel);
+        /* code */
     }
 }
 
@@ -359,9 +384,8 @@ void Server::handleEvents()
 
         }
         if((pfd.revents & POLLHUP) == POLLHUP){
-            if (_users.empty()  && _users.size() < 2 )
+            if (_pollfds.size() < 2) //TODO: BİLİYOZ 
                 break;
-            //TODO: QUIT :KVIrc 5.0.0 Aria http://www.kvirc.net/else içi std bunu handle etcez
             std::cout << "arabadan atladi" << std::endl;
             removeUserAndFd(pfd.fd);
         }
