@@ -33,7 +33,6 @@ void Join::execute(int client_fd)
 		_users->setChannelName(_args[1]);//new 2 eklencek
 		_server->addToChannel(channel, _users,_args[1],_users->getClientfd());
 	}
-	
 }
 
 std::string Join::getName() const

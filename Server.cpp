@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "Commands.hpp"
+#include <algorithm>
 
 void printSocketInfo(int sock_fd) {
     sockaddr_in addr;
@@ -156,51 +157,54 @@ void Server::removeUserAndFd(int client_fd)
         std::cout << "asd" << std::endl;
 
 }
-//TODO: kanal oluşturur ve kanalın ismini kanallara kaydeder
-Channel *Server::setChannel(std::vector<string> args)
-{
-    Channel *channel = new Channel(args[1]);
-    _channel.push_back(channel);
-//TODO: SADECE GÖRMEK İÇİN
-    for (std::vector<Channel*>::iterator it = _channel.begin(); it != _channel.end(); ++it)
-    {
-        std::cout << (*it)->getChannelName() << std::endl;
-    }
-    return channel;
-}
-void Server::addToChannel(Channel *channel, User *users,std::string & chname,int clfd)
-{
 
-    // Kullanıcıya katıldığını bildiren mesaj
+
+void Server::addToChannel(Channel *channel, User *users, std::string &chname, int clfd) {
+
     std::string message = ":" + users->getNickName() + "!" + users->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n";
 
-    // Tüm kullanıcılara mesaj gönder
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
-        if ((*it)->getChannelName() == chname) 
-            sendMessage((*it)->getClientfd(), message);
-    }
-    //kullanıcının kendisine o kanaldaki tüm kullanıcıları gösterir
-    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
-    {
-        if ((*it)->getChannelName() == chname && (*it)->getClientfd() != clfd)
-        {
-            sendMessage(clfd,":" + (*it)->getNickName() + "!" + (*it)->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n");
-           
-        }
-        else if (((*it)->getChannelName() == chname && (*it)->getNickName() == channel->getAdminName()))
-        {
-            std::string str = "MODE " + chname + " +o " + channel->getAdminName()+ "\r\n";
-            sendMessage((*it)->getClientfd(), str);
+        User* user = *it;
+        std::vector<std::string> userChannels = user->getChannelName();
+        
+        if (std::find(userChannels.begin(), userChannels.end(), chname) != userChannels.end()) {
+            sendMessage(user->getClientfd(), message);
         }
     }
+
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
-        if((*it)->getNickName() != channel->getAdminName() && clfd == (*it)->getClientfd())
-        {
-            std::string str = "MODE " + chname + " +o " + channel->getAdminName()+ "\r\n";
-            sendMessage((*it)->getClientfd(), str);
+        User* user = *it;
+        std::vector<std::string> userChannels = user->getChannelName();
+
+        if (std::find(userChannels.begin(), userChannels.end(), chname) != userChannels.end() && user->getClientfd() != clfd) {
+            sendMessage(clfd, ":" + user->getNickName() + "!" + user->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n");
+        } else if (std::find(userChannels.begin(), userChannels.end(), chname) != userChannels.end() && user->getNickName() == channel->getAdminName()) {
+            std::string str = "MODE " + chname + " +o " + channel->getAdminName() + "\r\n";
+            sendMessage(user->getClientfd(), str);
         }
+    }
+
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+        User* user = *it;
+
+        if (user->getNickName() != channel->getAdminName() && clfd == user->getClientfd()) {
+            std::string str = "MODE " + chname + " +o " + channel->getAdminName() + "\r\n";
+            sendMessage(user->getClientfd(), str);
+        }
+    }
+
+    //userın içinde bulunduğu kanalları yazdırma for u
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+    User* user = *it;
+    std::vector<std::string> userChannels = user->getChannelName();
+    
+    for (std::vector<std::string>::iterator chanIt = userChannels.begin(); chanIt != userChannels.end(); ++chanIt) {
+        std::cout << "Kullanıcı: " << user->getNickName() << ", Kanal: " << *chanIt << std::endl;
     }
 }
+
+}
+
 Channel* Server::getChannel(std::string chname)
 {
     for(std::vector<Channel *>::iterator it = _channel.begin(); it != _channel.end(); ++it)
@@ -348,6 +352,7 @@ void Server::handleEvents()
                     if(fcntl(clientSock, F_SETFL,O_NONBLOCK) == -1)
                         throw std::runtime_error("Error while setting client socket non-blocking!");
                     sendMessage(clientSock,"@ :ServerMessage Enter : <Password>, <Name>, <Nickname>\n");
+                    break;
                 }
             } else {
                 char message[1024] = {0};

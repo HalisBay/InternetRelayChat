@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string> // std::string kullanabilmek için ekledik
-
+#include <vector>
 class User {
 private:
     std::string _name;
@@ -12,7 +12,7 @@ private:
     char *_host;
     int _port;
     bool _didRegister;
-    std::string _channelName;
+    std::vector<std::string> _channelName;
 public:
 	User();
     User(int client_fd, char *host, int port);
@@ -27,7 +27,7 @@ public:
     void setName(std::string &name);
     void setNickName(std::string &nickname);
     void setChannelName(std::string & ch);
-    std::string getChannelName(){return _channelName;}
+    std::vector<std::string> getChannelName(){return _channelName;}
 };
 
 #endif // USER_HPP
