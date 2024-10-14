@@ -18,3 +18,13 @@ void Channel::setTopicName(string topicName)
 {
 	_topicName = topicName;
 }
+
+void Channel::setUsers(User *user)
+{
+	_usersInChannel.push_back(user);
+}
+
+// std::vector<User *> Channel::getUsers()
+// {
+// 	return _usersInChannel;
+// }

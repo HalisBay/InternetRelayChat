@@ -18,12 +18,10 @@ void Join::execute(int client_fd)
 	// 	_args[1] = _args[1].substr(1);
 	
 
-	
-	_server->setChannel(_args);
-	// _server->addTo
-	std::string str = ":" + _users->getNickName() + "!" + _users->getName() + "@"+ _server->getHost() + " JOIN " + _args[1]+ "\r\n";
-	_server->sendMessage(_users->getClientfd(), str);
-	//TODO: MOD VERME YERİ
+	Channel *channel;
+	channel = _server->setChannel(_args);
+	//TODO: MOD VERM	_server->addToChannel(channel, _users);
+E YERİ
 	//str = "MODE " + _args[1] + " +o " + _users->getNickName() + "/r/n";
 	//_server->sendMessage(_users->getClientfd(), str);
 

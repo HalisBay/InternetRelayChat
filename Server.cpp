@@ -169,6 +169,26 @@ Channel *Server::setChannel(std::vector<string> args)
     return channel;
 }
 
+void Server::addToChannel(Channel *channel, User *users)
+{
+    channel->setUsers(users);
+    std::vector<User *> usersInChannel = channel->getUsers();
+
+    // Kullanıcıya katıldığını bildiren mesaj
+    std::string message = ":" + users->getNickName() + "!" + users->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n";
+
+    // Tüm kullanıcılara mesaj gönder
+    for (std::vector<User *>::iterator it = usersInChannel.begin(); it != usersInChannel.end(); ++it)
+    {
+        std::cout << "------------\n";
+        std::cout << usersInChannel.size() << "123----31" <<std::endl;
+        std::cout << (*it)->getNickName() << "mustipatlak" <<std::endl;
+        sendMessage((*it)->getClientfd(), message); // Burada sendMessage fonksiyonunu kullanıcıya göre uyarlayın.
+        std::cout << "------------\n";
+
+    }
+}
+
 std::string Server::getHost()
 {
 	return _host;
@@ -339,11 +359,11 @@ void Server::handleEvents()
 
         }
         if((pfd.revents & POLLHUP) == POLLHUP){
+            if (_users.empty()  && _users.size() < 2 )
+                break;
             //TODO: QUIT :KVIrc 5.0.0 Aria http://www.kvirc.net/else içi std bunu handle etcez
             std::cout << "arabadan atladi" << std::endl;
             removeUserAndFd(pfd.fd);
-            if (_users.empty())
-                break;
         }
     }
 }
@@ -353,12 +373,4 @@ void Server::addUser(int client_fd,char *host, int port)
 	User* newUser = new User(client_fd, host, port);
 	_users.push_back(newUser);
 	std::cout << "User added: " << "host:" << host <<  "\tport:" << port <<std::endl;
-}
-
-std::vector<User *> Server::getUsers()
-{
-	if (_users.empty()) {
-        std::cerr << "No users in the vector." << std::endl;
-    }
-	return _users;
 }
