@@ -384,7 +384,7 @@ void Server::handleEvents()
 
         }
         if((pfd.revents & POLLHUP) == POLLHUP){
-            if (_pollfds.size() < 2) //TODO: BİLİYOZ 
+            if (_pollfds.size() < 2) //TODO: BİLİYOZ.
                 break;
             std::cout << "arabadan atladi" << std::endl;
             removeUserAndFd(pfd.fd);
