@@ -170,30 +170,35 @@ Channel *Server::setChannel(std::vector<string> args)
 }
 void Server::addToChannel(Channel *channel, User *users,std::string & chname,int clfd)
 {
-    if (!channel) {
-        std::cerr << "Channel is null!" << std::endl;
-        return; // Hata durumu
-    }
-    std::cout << "------------1\n";
+
     // Kullanıcıya katıldığını bildiren mesaj
     std::string message = ":" + users->getNickName() + "!" + users->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n";
-    std::cout << "------------1\n";
 
     // Tüm kullanıcılara mesaj gönder
-  for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
-        if ((*it)->getChannelName() == chname) {
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+        if ((*it)->getChannelName() == chname) 
             sendMessage((*it)->getClientfd(), message);
-            std::cout << "--------\n";
-
-        }
     }
-    std::cout << "------------1\n";
-
+    //kullanıcının kendisine o kanaldaki tüm kullanıcıları gösterir
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
     {
-        if ((*it)->getChannelName() == chname)
-             sendMessage(clfd,":" + (*it)->getNickName() + "!" + (*it)->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n");
-    
+        if ((*it)->getChannelName() == chname && (*it)->getClientfd() != clfd)
+        {
+            sendMessage(clfd,":" + (*it)->getNickName() + "!" + (*it)->getName() + "@" + getHost() + " JOIN " + channel->getChannelName() + "\r\n");
+           
+        }
+        else if (((*it)->getChannelName() == chname && (*it)->getNickName() == channel->getAdminName()))
+        {
+            std::string str = "MODE " + chname + " +o " + channel->getAdminName()+ "\r\n";
+            sendMessage((*it)->getClientfd(), str);
+        }
+    }
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+        if((*it)->getNickName() != channel->getAdminName() && clfd == (*it)->getClientfd())
+        {
+            std::string str = "MODE " + chname + " +o " + channel->getAdminName()+ "\r\n";
+            sendMessage((*it)->getClientfd(), str);
+        }
     }
 }
 Channel* Server::getChannel(std::string chname)
@@ -207,11 +212,7 @@ Channel* Server::getChannel(std::string chname)
 }
 void Server::createChannel(Channel *channel)
 {
-    if (!channel)
-    {
-        _channel.push_back(channel);
-        /* code */
-    }
+    _channel.push_back(channel);
 }
 
 std::string Server::getHost()

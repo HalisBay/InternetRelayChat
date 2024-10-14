@@ -17,19 +17,23 @@ void Join::execute(int client_fd)
 	// if (_args[1][0] == '#')
 	// 	_args[1] = _args[1].substr(1);
 	
-
+	
 	Channel *channel = _server->getChannel(_args[1]);
     if(!channel)
     {
+		std::cout << "SŞUGDFPISUDFGUISDFPIUGSDGIPUFVSGIUPDFIGPUSIUFGSDIPGYFGIPYSDFIGPUYSDIFGUSOGUPIDFPIGUSDFIPGUASIDGPUFAISGUYFIPGUYDS"<< std::endl;
         channel = new Channel(_args[1]);
         _server->createChannel(channel);
+		channel->setAdminName(_users->getNickName());
+		_users->setChannelName(_args[1]);
+		_server->addToChannel(channel, _users,_args[1],_users->getClientfd());
     }
-	_users->setChannelName(_args[1]);//new 2 eklencek
-	_server->addToChannel(channel, _users,_args[1],_users->getClientfd());
-	//TODO: MOD VERME YERİ
-	//str = "MODE " + _args[1] + " +o " + _users->getNickName() + "/r/n";
-	//_server->sendMessage(_users->getClientfd(), str);
-
+	else
+	{
+		_users->setChannelName(_args[1]);//new 2 eklencek
+		_server->addToChannel(channel, _users,_args[1],_users->getClientfd());
+	}
+	
 }
 
 std::string Join::getName() const

@@ -24,6 +24,12 @@ void Channel::setUsers(User *user)
 	_usersInChannel.push_back(user);
 }
 
+void Channel::setAdminName(string admin)
+{
+	_adminName = admin;
+}
+
+
 // std::vector<User *> Channel::getUsers()
 // {
 // 	return _usersInChannel;

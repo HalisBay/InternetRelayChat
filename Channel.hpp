@@ -12,6 +12,7 @@ private:
 	string _channelName;
 	string _topicName;
 	std::vector<User *> _usersInChannel;
+	string _adminName;
 	//TODO: password alanı için her şeyi kanal mı ypıyor.
 
 public:
@@ -23,7 +24,9 @@ public:
     string getTopicName() { return _topicName; }
 	std::vector<User *> getUsers() {return _usersInChannel;}
 	void setUsers(User *user);
-	//std::vector<User *> getUsers();
+	void setAdminName(string admin);
+	string getAdminName(){return _adminName;}
+	// std::vector<User *> getUsers();
 };
 
 #endif // CHANNEL_HPP
