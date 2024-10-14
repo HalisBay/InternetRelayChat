@@ -20,8 +20,8 @@ void Join::execute(int client_fd)
 
 	Channel *channel;
 	channel = _server->setChannel(_args);
-	//TODO: MOD VERM	_server->addToChannel(channel, _users);
-E YERİ
+	_server->addToChannel(channel, _users);
+	//TODO: MOD VERME YERİ
 	//str = "MODE " + _args[1] + " +o " + _users->getNickName() + "/r/n";
 	//_server->sendMessage(_users->getClientfd(), str);
 
