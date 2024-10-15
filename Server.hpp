@@ -52,6 +52,10 @@ public:
     Channel* getChannel(std::string chname);
     void createChannel(Channel* channel);
     void addToChannel(Channel *channel, User *users,std::string & chname,int clfd);
+	std::vector<User*> getUsers();
+	std::vector<Channel*> getChannel();
+	int getServerSocket() {return _serverSocket;}
+
 };
 
 std::string trim(const std::string &s);
