@@ -355,31 +355,28 @@ void Server::handleEvents()
                     break;
                 }
             } else {
-                std::cout << "ammınake" << std::endl;
                 char buffer[1024] = {0};
                 std::string accumulated_message;
                 bool end_of_message = false;
                 while (!end_of_message) {
                     std::cout << "patlak" << std::endl;
-                    ssize_t bytes_received = recv(pfd.fd, buffer, sizeof(buffer) - 1, 1000);
+                    ssize_t bytes_received = recv(pfd.fd, buffer, sizeof(buffer) - 1, 0);
                     if (bytes_received == 0) {
                         std::cout << "Connection closed by client on fd: " << pfd.fd << std::endl;
                         removeUserAndFd(pfd.fd);
                         break;
                     }
-                    // Gelen verileri işleme
                     std::cout<<"--buffer-" <<buffer<< "--buffer- "<<std::endl;
                     for (ssize_t i = 0; i < bytes_received; i++) {
                         if (buffer[i] == '\n') {
-                            // Enter ile mesaj sona erdi
                             accumulated_message += buffer[i];
                             end_of_message = true;
                             if(buffer[i-1] == '\r')
                                 continue;
                             else
-                                break; // Mesaj işlenecek, döngüden çık
+                                break;
                         } else {
-                            accumulated_message += buffer[i]; // Karakterleri birleştir
+                            accumulated_message += buffer[i];
                         }
                     }
                 }
@@ -406,7 +403,7 @@ void Server::handleEvents()
                         {
                             if ((*it)->getClientfd() == pfd.fd && (*it)->didRegister())
                             {
-                                _commands->commandFinder(accumulated_message, *it);
+                                 _commands->commandFinder(accumulated_message, *it);
                                 break;
                             }
                             std::cout << "else içi for3" << std::endl;
