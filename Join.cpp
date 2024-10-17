@@ -14,8 +14,8 @@ void Join::execute(int client_fd)
 			return;
 		}
 	}
-	// if (_args[1][0] == '#')
-	// 	_args[1] = _args[1].substr(1);
+	if (_args[1][0] != '#')
+		_args[1] = _args[1].insert(0,"#");
 	
 	
 	Channel *channel = _server->getChannel(_args[1]);

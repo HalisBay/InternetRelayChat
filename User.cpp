@@ -37,3 +37,14 @@ void User::setChannelName(std::string &ch)
 {
 	_channelName.push_back(ch);
 }
+
+void User::removeUser(const std::string& channelName) {
+    // Kanal adını bul ve sil
+    for (std::vector<std::string>::iterator it = _channelName.begin(); it != _channelName.end(); ++it) {
+        if (*it == channelName) {
+            _channelName.erase(it); // Kanal adını sil
+			std::cout << "rmvrkmvramovrkpmv" << std::endl;
+            break; // Kanal silindikten sonra döngüden çık
+        }
+    }
+}
