@@ -6,7 +6,6 @@ Join::Join()
 
 void Join::execute(int client_fd)
 {
-	bool flag = false;
 	for (size_t i = 0; i < _args.size(); i++)
 	{
 		if(i>2)
@@ -20,14 +19,9 @@ void Join::execute(int client_fd)
 	{
 		if(*it == _args[1])
 		{
-			flag = true;
-			break;
+			_server->sendError(client_fd,"You're already joined the channel.\n");
+			return;
 		}
-	}
-	if(flag)
-	{
-		_server->sendError(client_fd,"You're already joined the channel.\n");
-		return;
 	}
 	if (_args[1][0] != '#')
 		_args[1] = _args[1].insert(0,"#");

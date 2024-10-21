@@ -285,7 +285,6 @@ bool Server::isUserNameTaken(const std::string &nickname) {
 void Server::sendError(int clientSock, const std::string &message) {
     std::string fullMessage = "ERROR " + message; 
     send(clientSock, fullMessage.c_str(), fullMessage.length(), 0);
-
 }
 void Server::sendMessage(int clientSock, const std::string &message) {
     send(clientSock, message.c_str(), message.length(), 0);

@@ -6,7 +6,7 @@ Part::Part()
 
 void Part::execute(int client_fd)
 {
-    if (_args.size() == 2 || _args.size() == 7)
+    if (_args.size() == 2 || _args.size() == 7)// 2 for PART from server, 7 for PART from channel
     {
         std::vector<User*> allUsers = _server->getUsers();
 

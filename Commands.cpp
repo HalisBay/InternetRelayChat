@@ -15,6 +15,7 @@
 #include "List.hpp"
 #include "Names.hpp"
 #include "User.hpp"
+#include "Who.hpp"
 #include <sys/socket.h>
 #include <sstream>
 
@@ -33,6 +34,7 @@ Commands::Commands(Server* server) : _server(server) {
 	_commands.push_back(new Kick());
 	_commands.push_back(new List());
 	_commands.push_back(new Names());
+	_commands.push_back(new Who());
 }
 
 // Destructor implementation
@@ -47,6 +49,7 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 	std::vector<std::string> args = setArgs(cmdName);
 	for(size_t i = 0; i < _commands.size(); i++)
 	{
+		std::cout << args[0] << "==" <<_commands[i]->getName() << std::endl;
 		if(cmdName != "" && _commands[i]->getName() == args[0])
 		{
 
