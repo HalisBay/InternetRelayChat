@@ -47,7 +47,6 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 	std::vector<std::string> args = setArgs(cmdName);
 	for(size_t i = 0; i < _commands.size(); i++)
 	{
-		std::cout << "burada mı" << std::endl;
 		if(cmdName != "" && _commands[i]->getName() == args[0])
 		{
 

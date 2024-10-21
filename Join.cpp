@@ -21,7 +21,6 @@ void Join::execute(int client_fd)
 	Channel *channel = _server->getChannel(_args[1]);
     if(!channel)
     {
-		std::cout << "SŞUGDFPISUDFGUISDFPIUGSDGIPUFVSGIUPDFIGPUSIUFGSDIPGYFGIPYSDFIGPUYSDIFGUSOGUPIDFPIGUSDFIPGUASIDGPUFAISGUYFIPGUYDS"<< std::endl;
         channel = new Channel(_args[1]);
         _server->createChannel(channel);
 		channel->setAdminName(_users->getNickName());

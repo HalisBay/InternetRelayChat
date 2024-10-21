@@ -2,6 +2,7 @@
 #define QUIT_HPP
 
 #include "Command.hpp"  // Ensure this includes Commands
+#include "Commands.hpp"
 
 class Quit : public Command // Inherit from Commands
 {

@@ -55,6 +55,7 @@ public:
 	std::vector<User*> getUsers();
 	std::vector<Channel*> getChannel();
 	int getServerSocket() {return _serverSocket;}
+    Commands *getCommands() { return _commands; }
 
 };
 
