@@ -6,6 +6,7 @@ Join::Join()
 
 void Join::execute(int client_fd)
 {
+	bool flag = false;
 	for (size_t i = 0; i < _args.size(); i++)
 	{
 		if(i>2)
@@ -14,11 +15,24 @@ void Join::execute(int client_fd)
 			return;
 		}
 	}
+	std::vector<std::string> userChannels = _users->getChannelName();
+	for (std::vector<std::string>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
+	{
+		if(*it == _args[1])
+		{
+			flag = true;
+			break;
+		}
+	}
+	if(flag)
+	{
+		_server->sendError(client_fd,"You're already joined the channel.\n");
+		return;
+	}
 	if (_args[1][0] != '#')
 		_args[1] = _args[1].insert(0,"#");
-	
-	
 	Channel *channel = _server->getChannel(_args[1]);
+
     if(!channel)
     {
         channel = new Channel(_args[1]);
