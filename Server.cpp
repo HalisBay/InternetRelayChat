@@ -374,6 +374,8 @@ void Server::handleEvents()
                 if (end_of_message) {
                     if (!accumulated_message.empty()) {
                         accumulated_message = trim(accumulated_message);
+                        if(accumulated_message.empty())
+                            break;
                        for(std::vector<User *>::iterator it = _users.begin(); it != _users.end(); ++it) {
                         if((*it)->getClientfd() == pfd.fd && accumulated_message.find("\r\n") && !(*it)->didRegister())
                         {
@@ -426,4 +428,15 @@ std::vector<User *> Server::getUsers()
 std::vector<Channel *> Server::getChannel()
 {
 	return _channel;
+}
+
+User *Server::findUserByNick(const std::string &nickName)
+{
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
+        User* user = *it;
+        if ((*it)->getNickName() == nickName) {
+            return (*it);
+        }
+    }
+    return nullptr;
 }
