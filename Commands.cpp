@@ -67,8 +67,14 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 			_commands[i]->execute((*it).getClientfd());
 			break;
 		}
-		if(cmdName != "" && i == _commands.size() -1)
+		else if(args[0] == "PASS" || args[0] == "MODE")
+		{
+			break;
+		}
+		else if(cmdName != "" && i == _commands.size() -1)
+		{
 			_server->sendError((*it).getClientfd(),"Command not found\n");
+		}
 	}
 
 	return 0;

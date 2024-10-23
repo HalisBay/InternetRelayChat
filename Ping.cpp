@@ -7,8 +7,9 @@ Ping::Ping()
 
 void Ping::execute(int client_fd)
 {
-	// Commands *pongcommand = _server->getCommands();
-	// pongcommand->commandFinder("PONG", _users);
+	Commands *pongcommand = _server->getCommands();
+	// // ping aldığında dair mesaj gönder send ile
+	pongcommand->commandFinder("PONG " + _args[1], _users);
 }
 
 std::string Ping::getName() const
