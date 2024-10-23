@@ -6,10 +6,10 @@ Part::Part()
 
 void Part::execute(int client_fd)
 {
-    if (_args.size() == 2 || _args.size() == 7)// 2 for PART from server, 7 for PART from channel
+    if (_args.size() < 3 || _args.size() == 7)
     {
+		bool flag = false;
         std::vector<User*> allUsers = _server->getUsers();
-
         for (std::vector<User*>::iterator user_it = allUsers.begin(); user_it != allUsers.end(); ++user_it)
         {
             if ((*user_it)->getClientfd() == client_fd)
@@ -20,6 +20,7 @@ void Part::execute(int client_fd)
                 {
                     if (*ch_it == _args[1])
                     {
+						flag = true;
                         (*user_it)->removeUser(_args[1]); 
                         _server->sendMessage(client_fd , ":" + (*user_it)->getNickName() + "!" + (*user_it)->getName() + "@" + _server->getHost() + " PART " + _args[1] + "\n\r");
 						for (std::vector<User*>::iterator it = allUsers.begin(); it != allUsers.end(); ++it) 
@@ -32,7 +33,15 @@ void Part::execute(int client_fd)
                 }
             }
         }
+		if (!flag)
+        {
+            std::string errorMessage = "Error: Channel " + _args[1] + " not found.\n";
+            _server->sendError(client_fd, errorMessage);
+            return;
+        }
     }
+	else
+		_server->sendError(client_fd, " Argument error");
 }
 
 std::string Part::getName() const
