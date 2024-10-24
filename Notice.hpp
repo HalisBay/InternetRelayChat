@@ -1,9 +1,9 @@
 #ifndef NOTICE_HPP
 #define NOTICE_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Notice : public Command // Inherit from Commands
+class Notice : public Command
 {
 public:
 	Notice();

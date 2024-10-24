@@ -1,9 +1,9 @@
 #ifndef HELP_HPP
 #define HELP_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Help : public Command // Inherit from Commands
+class Help : public Command
 {
 public:
 	Help();

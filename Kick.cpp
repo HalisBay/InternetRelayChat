@@ -38,7 +38,6 @@ void Kick::execute(int client_fd)
 								{
 									if(client_fd != (*it)->getClientfd())
 									{
-										std::cout << "naber mudur ---------" << std::endl;
 										_server->sendMessage((*it)->getClientfd() , ":" + _users->getNickName() + "!" + _users->getName() + "@" + _server->getHost() + " KICK " + _args[1] + " " + _args[2] + " :" + mes +"\n\r");
 									}
 								}

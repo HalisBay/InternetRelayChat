@@ -1,9 +1,9 @@
 #ifndef PONG_HPP
 #define PONG_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Pong : public Command // Inherit from Commands
+class Pong : public Command
 {
 public:
 	Pong();

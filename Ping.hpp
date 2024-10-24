@@ -1,9 +1,9 @@
 #ifndef PING_HPP
 #define PING_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Ping : public Command // Inherit from Commands
+class Ping : public Command
 {
 public:
 	Ping();

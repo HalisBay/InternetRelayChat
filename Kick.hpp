@@ -1,9 +1,9 @@
 #ifndef KICK_HPP
 #define KICK_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Kick : public Command // Inherit from Commands
+class Kick : public Command
 {
 public:
 	Kick();

@@ -13,7 +13,6 @@ private:
 	string _topicName;
 	std::vector<User *> _usersInChannel;
 	string _adminName;
-	//TODO: password alanı için her şeyi kanal mı ypıyor.
 
 public:
 	Channel(std::string &channelName);

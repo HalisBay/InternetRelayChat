@@ -1,9 +1,9 @@
 #ifndef NAMES_HPP
 #define NAMES_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Names : public Command // Inherit from Commands
+class Names : public Command
 {
 public:
 	Names();

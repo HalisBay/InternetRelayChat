@@ -11,13 +11,11 @@ void Quit::execute(int client_fd)
 	std::vector<std::string> userChannels = _users->getChannelName();
 	for (std::vector<std::string>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
 	{
-		if((*it).data() && (*it).data()[0] != '\0') //stringe çevirilip bakılabilir char* a bakarak yapıyorum.
+		if((*it).data() && (*it).data()[0] != '\0')
 		{
-			//PARTA gönderip kanallardan çıkıcak sonra quit
 			partcommand->commandFinder("PART " + *it, _users);
 		}
 	}
-	// _server->sendMessage(client_fd,":" + _users->getNickName()+"!"+_users->getName()+"@"+ _server->getHost()+"\r\n");
 	_server->removeUserAndFd(client_fd);
 }
 

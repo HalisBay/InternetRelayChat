@@ -11,10 +11,6 @@ void Notice::execute(int client_fd)
         _server->sendMessage(client_fd, "Usage: notice <Target> <Message>\n");
         return;
     }
-
-    // if (_args[2].find("LAGCHECK") != std::string::npos)
-    //     return;
-
     User* targetUser = _server->findUserByNick(_args[1]);
     if (!targetUser)
     {

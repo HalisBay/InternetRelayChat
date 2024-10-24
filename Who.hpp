@@ -1,9 +1,9 @@
 #ifndef WHO_HPP
 #define WHO_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Who : public Command // Inherit from Commands
+class Who : public Command
 {
 public:
 	Who();

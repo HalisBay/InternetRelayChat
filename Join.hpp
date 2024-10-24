@@ -1,9 +1,9 @@
 #ifndef JOIN_HPP
 #define JOIN_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Join : public Command // Inherit from Commands
+class Join : public Command 
 {
 public:
 	Join();

@@ -6,10 +6,6 @@ Privmsg::Privmsg()
 
 void Privmsg::execute(int client_fd)
 {
-	for (size_t i = 0; i < _args.size(); i++)
-	{
-		std::cout<< i << " " << _args[i] << std::endl;
-	}
 	
     if (_args.size() >= 2)
     {
@@ -67,7 +63,7 @@ void Privmsg::execute(int client_fd)
                 }
                 if(_users->getNickName() == _args[1])
                 {
-                    _server->sendError(client_fd, "Please enter a valid user\n");
+                    _server->sendError(client_fd, "You cannot send messages to yourself.\n");
                     return;
                 }
                 if (i == users.size() - 1)

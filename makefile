@@ -1,4 +1,4 @@
-NAME = ircserver
+NAME = ircserv
 CC = c++
 CFLAGS = -std=c++98 -fsanitize=address -g
 SRCS = $(wildcard *.cpp)

@@ -1,7 +1,7 @@
 #include "Server.hpp"
-#include "Commands.hpp"  // Include Commands header
+#include "Commands.hpp"
 #include "Command.hpp"
-#include "Help.hpp"      // Include Help header to recognize Help class
+#include "Help.hpp"
 #include "Quit.hpp"
 #include "Join.hpp"
 #include "Nick.hpp"
@@ -19,9 +19,8 @@
 #include <sys/socket.h>
 #include <sstream>
 
-// Constructor implementation
 Commands::Commands(Server* server) : _server(server) { 
-    _commands.push_back(new Help());  // Add Help command in constructor
+    _commands.push_back(new Help());
 	_commands.push_back(new Quit());
 	_commands.push_back(new Join());
 	_commands.push_back(new Nick());
@@ -37,10 +36,9 @@ Commands::Commands(Server* server) : _server(server) {
 	_commands.push_back(new Who());
 }
 
-// Destructor implementation
 Commands::~Commands() {
     for (size_t i = 0; i < _commands.size(); ++i) {
-        delete _commands[i];  // Clean up allocated memory
+        delete _commands[i];
     }
 }
 
@@ -49,21 +47,12 @@ Command* Commands::commandFinder(const std::string &cmdName, User *it)
 	std::vector<std::string> args = setArgs(cmdName);
 	for(size_t i = 0; i < _commands.size(); i++)
 	{
-		std::cout << args[0] << "==" <<_commands[i]->getName() << std::endl;
 		if(cmdName != "" && _commands[i]->getName() == args[0])
 		{
 
 			_commands[i]->setServer(_server);
 			_commands[i]->setUser(it);
 			_commands[i]->setUserArgs(args);
-			std::cout << "args içi --------------\n";
-
-			for(std::vector<std::string>::const_iterator it = args.begin(); it != args.end(); ++it) {
-				std::cout <<(*it).data() << std::endl;
-			}
-			std::cout << " args sonu--------------\n";
-			
-			// fdyi ya userdan ya da direk clientfd olarak parametre olarak alacak bir fonksiyon gelecek buraya sebebi bütün commandlerin executuna göndermemek için
 			_commands[i]->execute((*it).getClientfd());
 			break;
 		}
@@ -90,9 +79,8 @@ std::vector<std::string> Commands::setArgs(const std::string &msg) {
     std::stringstream ss(msg);
     std::string arg;
 
-    // Mesajı boşluklara göre ayır
     while (std::getline(ss, arg, ' ')) {
-        if (!arg.empty()) { // Boş argümanları ekleme
+        if (!arg.empty()) {
             cpyArg.push_back(arg);
         }
     }

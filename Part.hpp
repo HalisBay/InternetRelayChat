@@ -1,9 +1,9 @@
 #ifndef PART_HPP
 #define PART_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Part : public Command // Inherit from Commands
+class Part : public Command
 {
 public:
 	Part();

@@ -1,5 +1,4 @@
 #include "Help.hpp"
-#include "Utils.hpp"
 #include "Commands.hpp"
 #include "Server.hpp"
 

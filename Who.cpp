@@ -7,7 +7,6 @@ Who::Who()
 void Who::execute(int client_fd)
 {
 	bool channelExists = 0;
-	//server get users ile kullanıcı alıp tüm kullanıcılar için kanal ismi eşleşiyorsa eşleşen kullanıcıları yazdır.
 	if (_args.size() == 2)
 	{
 		std::vector<User *> users = _server->getUsers();
@@ -18,7 +17,6 @@ void Who::execute(int client_fd)
 				std::vector<std::string> userChannels = (*us_it)->getChannelName();
 				for (std::vector<std::string>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
 				{
-					std::cout << (*it).data() << _args[1] << std::endl;
 					if((*it).data()[0] != '\0' && (*it).data() && (*it) == _args[1])
 					{
 						_server->sendMessage(client_fd, "Nick: " + (*us_it)->getNickName() + "\n");

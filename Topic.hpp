@@ -1,9 +1,9 @@
 #ifndef TOPIC_HPP
 #define TOPIC_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Topic : public Command // Inherit from Commands
+class Topic : public Command
 {
 public:
 	Topic();

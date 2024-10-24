@@ -37,7 +37,7 @@ void Join::execute(int client_fd)
     }
 	else
 	{
-		_users->setChannelName(_args[1]);//new 2 eklencek
+		_users->setChannelName(_args[1]);
 		_server->addToChannel(channel, _users,_args[1],_users->getClientfd());
 	}
 }

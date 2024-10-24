@@ -81,7 +81,7 @@ bool isOnlyWhitespace(const std::string& str) {
 
 void Server::forRegisterFromClient(std::string &message, int clientSock, User *us) {
     size_t pos, lastPos;
-    std::string charactersToFind = "\r\n"; // Satır sonu karakterleri
+    std::string charactersToFind = "\r\n";
 
     
     if (message.find("PASS") == 0) {
@@ -96,7 +96,7 @@ void Server::forRegisterFromClient(std::string &message, int clientSock, User *u
         {
                 if ((pos = message.find("NICK "))) {
                     lastPos = message.find(charactersToFind, pos);
-                    std::string nickname = message.substr(pos + 5, lastPos - (pos + 5)); // Düzeltildi
+                    std::string nickname = message.substr(pos + 5, lastPos - (pos + 5));
 
                     if (isUserNameTaken(nickname)) {
                         sendError(clientSock, "Nickname is already taken! Please try another one.\nEnter: <Password>, <Name>, <Nickname>\n");
@@ -142,6 +142,10 @@ void Server::removeUserAndFd(int client_fd)
 
         if (client_fd == (*it)->getClientfd())
         {
+            if((*it)->didRegister() == true)
+                std::cout << (*it)->getNickName() << " left the server."<<std::endl;
+            else
+                std::cout << "fd: "<<(*it)->getClientfd() << ", left the server." <<std::endl;
             delete (*it);
             _users.erase(it);
             break ;
@@ -185,14 +189,9 @@ void Server::addToChannel(Channel *channel, User *users, std::string &chname, in
         }
     }
 
-    //userın içinde bulunduğu kanalları yazdırma for u
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
     User* user = *it;
     std::vector<std::string> userChannels = user->getChannelName();
-    
-    for (std::vector<std::string>::iterator chanIt = userChannels.begin(); chanIt != userChannels.end(); ++chanIt) {
-        std::cout << "Kullanıcı: " << user->getNickName() << ", Kanal: " << *chanIt << std::endl;
-    }
 }
 
 }
@@ -222,7 +221,7 @@ void Server::forRegister(std::string &message, int clientSock, User *us) {
     size_t argCount = std::count(message.begin(), message.end(), ' ') + 1;
     if (message.find("\r\n") != std::string::npos)
     {
-        return; //TODO: burayı başktaki CAP LS için kullandık ama ben buraya şerh düşüyorum
+        return;
     }
  
     if (argCount > 3) {
@@ -254,8 +253,6 @@ void Server::forRegister(std::string &message, int clientSock, User *us) {
     std::cout <<"name:" <<  us->getName() << " nickname " <<  us->getNickName() <<"is Register " << us->didRegister() << std::endl;
 }
 
-
-// Mesajı parçalara ayıran fonksiyon
 bool Server::splitMessage(const std::string &message, std::string &part1, std::string &part2, std::string &part3) {
     size_t first_space = message.find(' ');
     if (first_space != std::string::npos) {
@@ -270,7 +267,7 @@ bool Server::splitMessage(const std::string &message, std::string &part1, std::s
         }
         return !isOnlyWhitespace(part1) && !isOnlyWhitespace(part2) && !isOnlyWhitespace(part3);
     }
-    return false; // Mesajda boşluk yok
+    return false;
 }
 
 bool Server::isUserNameTaken(const std::string &nickname) {
@@ -312,7 +309,7 @@ void Server::start()
     
 
     while(true)
-    {                                                      //timeout eklenebilir
+    {
         int numReady = poll(&_pollfds[0], _pollfds.size(), -1);
         if(numReady == -1)
             throw std::runtime_error("Error: while polling!");
@@ -323,16 +320,10 @@ void Server::start()
 void Server::handleEvents()
 {
     for (unsigned long i = 0; i < _pollfds.size(); ++i) {
-        std::cout << "\r Poll fd size : "<<_pollfds.size() << std::endl;
         struct pollfd& pfd = _pollfds[i];
         if((pfd.revents & POLLHUP) == POLLHUP){
             if (_users.empty())
-			{
 				break;
-			}
-            // if (_pollfds.size() < 2) //TODO: BİLİYOZ.
-            //     break;
-            std::cout << "arabadan atladi" << std::endl;
             removeUserAndFd(pfd.fd);
             break;
         }
@@ -380,8 +371,6 @@ void Server::handleEvents()
                         }
                     }
                 }
-                std::cout <<"---123"<< accumulated_message << "---123"<<std::endl;
-                // Mesajı işleme
                 if (end_of_message) {
                     if (!accumulated_message.empty()) {
                         accumulated_message = trim(accumulated_message);

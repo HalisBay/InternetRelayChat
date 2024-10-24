@@ -19,7 +19,7 @@
 #include "User.hpp"
 #include "Channel.hpp"
 
-class Commands;  // Forward declaration of Commands
+class Commands;
 
 class Server {
 private:
@@ -27,10 +27,10 @@ private:
     std::string _port;
     std::string _password;
     int _serverSocket;
-    std::vector<struct pollfd> _pollfds; // Poll file descriptors for I/O events
+    std::vector<struct pollfd> _pollfds;
     std::vector<User*> _users;
     std::vector<Channel*> _channel;
-    Commands* _commands;  // Pointer to Commands
+    Commands* _commands;
 
     int setupSocket();          
 

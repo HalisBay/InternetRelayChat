@@ -1,9 +1,9 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class List : public Command // Inherit from Commands
+class List : public Command
 {
 public:
 	List();

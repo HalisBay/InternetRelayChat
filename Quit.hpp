@@ -1,10 +1,10 @@
 #ifndef QUIT_HPP
 #define QUIT_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 #include "Commands.hpp"
 
-class Quit : public Command // Inherit from Commands
+class Quit : public Command
 {
 public:
 	Quit();

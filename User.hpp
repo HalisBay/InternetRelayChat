@@ -2,7 +2,7 @@
 #define USER_HPP
 
 #include <iostream>
-#include <string> // std::string kullanabilmek için ekledik
+#include <string>
 #include <vector>
 class User {
 private:

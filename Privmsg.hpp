@@ -1,9 +1,9 @@
 #ifndef PRIVMSG_HPP
 #define PRIVMSG_HPP
 
-#include "Command.hpp"  // Ensure this includes Commands
+#include "Command.hpp"
 
-class Privmsg : public Command // Inherit from Commands
+class Privmsg : public Command
 {
 public:
 	Privmsg();
