@@ -6,13 +6,10 @@ Join::Join()
 
 void Join::execute(int client_fd)
 {
-	for (size_t i = 0; i < _args.size(); i++)
+	if(_args.size() != 2)
 	{
-		if(i>2)
-		{
-			_server->sendError(client_fd,"Too many parameters for join. Please enter '/join' 'channel name' 'password' .\n");
-			return;
-		}
+		_server->sendError(client_fd,"Usage: /join #Channel name.\n");
+		return;
 	}
 	std::vector<std::string> userChannels = _users->getChannelName();
 	for (std::vector<std::string>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
@@ -24,7 +21,10 @@ void Join::execute(int client_fd)
 		}
 	}
 	if (_args[1][0] != '#')
-		_args[1] = _args[1].insert(0,"#");
+	{
+		_server->sendError(client_fd,"Usage: /join #Channel name.\n");
+		return;
+	}
 	Channel *channel = _server->getChannel(_args[1]);
 
     if(!channel)

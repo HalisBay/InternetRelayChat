@@ -37,7 +37,7 @@ void Names::execute(int client_fd)
         }
 	}
 	else
-		 _server->sendError(client_fd, "Please enter an argument\n");
+		 _server->sendError(client_fd, "Usage: /names <channel>\n");
 }
 
 std::string Names::getName() const

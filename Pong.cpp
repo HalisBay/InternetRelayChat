@@ -8,7 +8,6 @@ void Pong::execute(int client_fd)
 {
 	// std::cout << _users->getNickName() << "mustmustumsutmustmustu"<<std::endl; 
 	// :AS31S!asdasd@localhost PONG :AS31S
-	std::cout <<"--"<< _args[1] << "--asasdasdadasdasdasdsadas" << std::endl;
 	if(_args.size() < 2)
 	{
 		_server->sendError(client_fd, "Usage: PING/PONG <message>\r\n");

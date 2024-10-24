@@ -40,7 +40,7 @@ void List::execute(int client_fd)
 	    	}
 			if (!channelFound)
         	{
-        	    std::string errorMessage = "Error: Channel " + _args[1] + " not found.\n";
+        	    std::string errorMessage = "Channel " + _args[1] + " not found.\n";
         	    _server->sendError(client_fd, errorMessage);
         	    return;
         	}
@@ -66,6 +66,11 @@ void List::execute(int client_fd)
 	    	    std::string message = "Channel " + (*it)->getChannelName() + " Users: " + std::to_string(userCount) + "\n";
 	    	    _server->sendMessage(client_fd, message);
 	    	}
+			if (channels.empty())
+			{
+				_server->sendError(client_fd, "Channels not found\n");
+			}
+			
 		}
 	}
 	else

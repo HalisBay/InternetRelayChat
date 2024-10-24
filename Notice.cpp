@@ -12,8 +12,8 @@ void Notice::execute(int client_fd)
         return;
     }
 
-    if (_args[2].find("LAGCHECK") != std::string::npos)
-        return;
+    // if (_args[2].find("LAGCHECK") != std::string::npos)
+    //     return;
 
     User* targetUser = _server->findUserByNick(_args[1]);
     if (!targetUser)
@@ -27,10 +27,15 @@ void Notice::execute(int client_fd)
     std::string portStr = oss.str();
 
     std::string str = ":" + _users->getNickName() + "!" + _users->getName() + "@" + portStr + " NOTICE " + targetUser->getNickName() + " :";
+    if (_args.size() >= 3 && _args[2].front() != ':')
+		str+= ":";
+	if (_args.size() == 2 && _args[1].back() != ':')
+		str+= ":";
 
     for (size_t i = 2; i < _args.size(); i++)
     {
-        str += " ";
+        if(i != 2)
+            str += " ";
         str += _args[i];
     }
 

@@ -325,6 +325,17 @@ void Server::handleEvents()
     for (unsigned long i = 0; i < _pollfds.size(); ++i) {
         std::cout << "\r Poll fd size : "<<_pollfds.size() << std::endl;
         struct pollfd& pfd = _pollfds[i];
+        if((pfd.revents & POLLHUP) == POLLHUP){
+            if (_users.empty())
+			{
+				break;
+			}
+            // if (_pollfds.size() < 2) //TODO: BİLİYOZ.
+            //     break;
+            std::cout << "arabadan atladi" << std::endl;
+            removeUserAndFd(pfd.fd);
+            break;
+        }
         if ((pfd.revents & POLLIN) == POLLIN) {
             if (pfd.fd == _serverSocket) {
                 sockaddr_in clientAddr;
@@ -400,12 +411,6 @@ void Server::handleEvents()
                 }
             }
 
-        }
-        if((pfd.revents & POLLHUP) == POLLHUP){
-            if (_pollfds.size() < 2) //TODO: BİLİYOZ.
-                break;
-            std::cout << "arabadan atladi" << std::endl;
-            removeUserAndFd(pfd.fd);
         }
     }
 }

@@ -6,20 +6,25 @@ Privmsg::Privmsg()
 
 void Privmsg::execute(int client_fd)
 {
-    if (_args.size() > 1)
+	for (size_t i = 0; i < _args.size(); i++)
+	{
+		std::cout<< i << " " << _args[i] << std::endl;
+	}
+	
+    if (_args.size() >= 2)
     {
-		if(_args.size() <= 2)
-			_args[2] = ":";
-		std::cout << _args[2] << std::endl;
-		if(_args[2][0] != ':')
-			_args[2].insert(0, ":");
 		std::string mes = ":" + _users->getNickName() + " PRIVMSG " + _args[1] + " : ";
-		for (size_t i = 2; i < _args.size()+1; i++)
+		if (_args.size() >= 3 && _args[2].front() != ':')
+			mes+= ":";
+		if (_args.size() == 2 && _args[1].back() != ':')
+			mes+= ":";
+
+		for (size_t i = 2; i < _args.size(); i++)
 		{
-			mes += " ";
+			if(i != 2)
+				mes += " ";
 			mes += _args[i];
 		}
-
 		std::vector<User*> users = _server->getUsers();
 		std::vector<Channel*> channel = _server->getChannel();
         if (_args[1][0] == '#')
@@ -55,9 +60,14 @@ void Privmsg::execute(int client_fd)
         {
             for (size_t i = 0; i < users.size(); i++)
             {
-                if (users[i]->getNickName() == _args[1])
+                if (users[i]->getNickName() == _args[1] && _users->getNickName() != _args[1])
                 {
                     _server->sendMessage(users[i]->getClientfd(), mes + "\n");
+                    return;
+                }
+                if(_users->getNickName() == _args[1])
+                {
+                    _server->sendError(client_fd, "Please enter a valid user\n");
                     return;
                 }
                 if (i == users.size() - 1)

@@ -6,7 +6,7 @@ Part::Part()
 
 void Part::execute(int client_fd)
 {
-    if (_args.size() < 3 || _args.size() == 7)
+    if (_args.size() == 2 || _args.size() == 7)
     {
 		bool flag = false;
         std::vector<User*> allUsers = _server->getUsers();
@@ -41,7 +41,7 @@ void Part::execute(int client_fd)
         }
     }
 	else
-		_server->sendError(client_fd, " Argument missing");
+		_server->sendError(client_fd, "Usage: /PART #<channel name>\n");
 }
 
 std::string Part::getName() const

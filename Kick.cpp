@@ -7,16 +7,16 @@ Kick::Kick()
 void Kick::execute(int client_fd)
 {
 	bool flag = false;
-	std::string mes;
-	for (size_t i = 3; i < _args.size(); i++)
-    {
-        mes += " ";
-        mes += _args[i];
-    }
-	std::vector<Channel*> channels = _server->getChannel();
-	std::vector<User*> allUsers = _server->getUsers();
 	if(_args.size() > 2)
 	{
+		std::string mes;
+		for (size_t i = 3; i < _args.size(); i++)
+		{
+			mes += " ";
+			mes += _args[i];
+		}
+		std::vector<Channel*> channels = _server->getChannel();
+		std::vector<User*> allUsers = _server->getUsers();
 		for(std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
 		{
 			if(_users->getNickName() == (*it)->getAdminName() && (*it)->getChannelName() == _args[1])
@@ -55,7 +55,7 @@ void Kick::execute(int client_fd)
 		}
 	}
 	else
-		_server->sendError(client_fd, "Argument missing\n");
+		_server->sendError(client_fd, "Usage: </kick> <#Channel Name> <User>\n");
 }
 
 std::string Kick::getName() const

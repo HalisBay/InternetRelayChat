@@ -35,16 +35,20 @@ void Nick::execute(int client_fd)
 			std::vector<std::string> channel = _users->getChannelName();
 			for(std::vector<User*>::iterator it = users.begin(); it != users.end(); ++it)
 			{
+
 				for (size_t i = 0; i < channel.size(); ++i)
 				{
-					std::string message = ":" + oldNick + " NICK " + _args[1] + "\n";
-					_server->sendMessage((*it)->getClientfd(), message);
+					if(_users->getNickName() != (*it)->getNickName())
+					{
+						std::string message = ":" + oldNick + " NICK " + _args[1] + "\n";
+						_server->sendMessage((*it)->getClientfd(), message);
+					}
 				}
 			}
 		}
 	}
 	else
-		_server->sendError(client_fd, " Argument is missing\n");
+		_server->sendError(client_fd, "Usage: /NICK <nickname>\n");
 }
 
 std::string Nick::getName() const

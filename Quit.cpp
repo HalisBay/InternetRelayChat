@@ -14,7 +14,7 @@ void Quit::execute(int client_fd)
 		if((*it).data() && (*it).data()[0] != '\0') //stringe çevirilip bakılabilir char* a bakarak yapıyorum.
 		{
 			//PARTA gönderip kanallardan çıkıcak sonra quit
-			partcommand->commandFinder("PART", _users);
+			partcommand->commandFinder("PART " + *it, _users);
 		}
 	}
 	// _server->sendMessage(client_fd,":" + _users->getNickName()+"!"+_users->getName()+"@"+ _server->getHost()+"\r\n");

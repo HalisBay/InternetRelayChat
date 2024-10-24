@@ -45,7 +45,7 @@ void Topic::execute(int client_fd)
  		}
 	}
 	else
-		_server->sendError(client_fd, " Argument missing\n");
+		_server->sendError(client_fd, "Usage: /topic <channel name> <Topic Title>\n");
 }
 
 std::string Topic::getName() const
