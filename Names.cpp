@@ -6,7 +6,7 @@ Names::Names()
 
 void Names::execute(int client_fd)
 {
-	if(_args.size() <= 2)
+	if(_args.size() == 2)
 	{
 	    std::vector<Channel*> channels = _server->getChannel();
 	    std::vector<User*> allUsers = _server->getUsers();

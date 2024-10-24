@@ -38,14 +38,14 @@ void Topic::execute(int client_fd)
  		    {
  		        if (userChannels[k] == _args[1]) 
  		        {
-					std::string message = ":" + _users->getNickName() + " TOPIC " + _args[1] + " :" + mes + "\n";
+					std::string message = ":" + _users->getNickName() + " TOPIC " + _args[1] + mes + "\n";
  		            _server->sendMessage((*it)->getClientfd(), message);
  		        }
  		    }
  		}
 	}
 	else
-		_server->sendError(client_fd, " Argument error\n");
+		_server->sendError(client_fd, " Argument missing\n");
 }
 
 std::string Topic::getName() const

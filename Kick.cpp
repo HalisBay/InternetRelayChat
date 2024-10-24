@@ -6,6 +6,7 @@ Kick::Kick()
 
 void Kick::execute(int client_fd)
 {
+	bool flag = false;
 	std::string mes;
 	for (size_t i = 3; i < _args.size(); i++)
     {
@@ -30,29 +31,31 @@ void Kick::execute(int client_fd)
             		    {
             		        if (*ch_it == _args[1])
             		        {
+								flag = true;
             		            (*user_it)->removeUser(_args[1]); 
             		            _server->sendMessage(client_fd , ":" + _users->getNickName() + "!" + _users->getName() + "@" + _server->getHost() + " KICK " + _args[1] + " " + _args[2] + " :" + mes +"\n\r");
 								for (std::vector<User*>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
 								{
-									if(client_fd != (*user_it)->getClientfd())
+									if(client_fd != (*it)->getClientfd())
 									{
 										std::cout << "naber mudur ---------" << std::endl;
 										_server->sendMessage((*it)->getClientfd() , ":" + _users->getNickName() + "!" + _users->getName() + "@" + _server->getHost() + " KICK " + _args[1] + " " + _args[2] + " :" + mes +"\n\r");
 									}
 								}
             		        }
+							break;
             		    }
             		}
-					else if((user_it + 1 ) == allUsers.end())
+					else if((user_it + 1 ) == allUsers.end() && !flag)
 						_server->sendError(client_fd, " User not found\n");
         		}
 			}
-			else if(_users->getNickName() != (*it)->getAdminName())
+			else if(_users->getNickName() != (*it)->getAdminName() && (*it)->getChannelName() == _args[1])
 				_server->sendError(client_fd, " Only admin can use this command\n");
-			else if((*it)->getChannelName() != _args[1])
-				_server->sendError(client_fd, " Channel not found\n");
 		}
 	}
+	else
+		_server->sendError(client_fd, "Argument missing\n");
 }
 
 std::string Kick::getName() const

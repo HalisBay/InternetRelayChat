@@ -35,13 +35,13 @@ void Part::execute(int client_fd)
         }
 		if (!flag)
         {
-            std::string errorMessage = "Error: Channel " + _args[1] + " not found.\n";
+            std::string errorMessage = " Channel " + _args[1] + " not found.\n";
             _server->sendError(client_fd, errorMessage);
             return;
         }
     }
 	else
-		_server->sendError(client_fd, " Argument error");
+		_server->sendError(client_fd, " Argument missing");
 }
 
 std::string Part::getName() const

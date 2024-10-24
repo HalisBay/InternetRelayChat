@@ -6,17 +6,22 @@ Privmsg::Privmsg()
 
 void Privmsg::execute(int client_fd)
 {
-    std::string mes = ":" + _users->getNickName() + " PRIVMSG " + _args[1] + " : ";
-    for (size_t i = 2; i < _args.size(); i++)
+    if (_args.size() > 1)
     {
-        mes += " ";
-        mes += _args[i];
-    }
+		if(_args.size() <= 2)
+			_args[2] = ":";
+		std::cout << _args[2] << std::endl;
+		if(_args[2][0] != ':')
+			_args[2].insert(0, ":");
+		std::string mes = ":" + _users->getNickName() + " PRIVMSG " + _args[1] + " : ";
+		for (size_t i = 2; i < _args.size()+1; i++)
+		{
+			mes += " ";
+			mes += _args[i];
+		}
 
-    std::vector<User*> users = _server->getUsers();
-	std::vector<Channel*> channel = _server->getChannel();
-    if (_args.size() > 2)
-    {
+		std::vector<User*> users = _server->getUsers();
+		std::vector<Channel*> channel = _server->getChannel();
         if (_args[1][0] == '#')
         {
             std::string channelName = _args[1];
@@ -64,7 +69,7 @@ void Privmsg::execute(int client_fd)
     }
     else
     {
-        _server->sendError(client_fd, " Argument error \n");
+        _server->sendError(client_fd, " Argument missing \n");
     }
 	_args.clear();
 }

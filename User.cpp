@@ -31,6 +31,7 @@ void User::setName(std::string &name)
 
 void User::setNickName(std::string &nickname)
 {
+	_nickName.clear();
 	_nickName = nickname;
 }
 void User::setChannelName(std::string &ch)
